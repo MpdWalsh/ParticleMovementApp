@@ -5,11 +5,13 @@
 #include "Particle.h"
 
 Particle::Particle() :
-position(vec2(0)), velocity(vec2(0)), acceleration(vec2(0)), radius(0), colour(ColorA(0,0,0,1))
+position(vec2(0)), velocity(vec2(0)), acceleration(vec2(0)), radius(0), mass(0), colour(ColorA(0,0,0,1))
 {}
 
-Particle::Particle(const vec2 &p, float r, const ColorA &c) {
+Particle::Particle(const vec2 &p, float r, float m, const ColorA &c) {
     radius = r;
+    mass = m;
+
     position = p;
     velocity = vec2(0);
     acceleration = vec2(0);
@@ -29,7 +31,7 @@ void Particle::draw() {
 }
 
 void Particle::applyForce(const vec2 &f) {
-    acceleration += f;
+    acceleration += (f / mass);
 }
 
 vec2 Particle::getPosition() const {
@@ -42,4 +44,8 @@ float Particle::getRadius() const {
 
 float Particle::getArea() const {
     return M_PI * radius * radius;
+}
+
+float Particle::getMass() const {
+    return mass;
 }

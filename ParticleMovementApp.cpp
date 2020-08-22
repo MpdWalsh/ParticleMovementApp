@@ -7,8 +7,8 @@
 
 #include "Particle.h"
 
-#define PERLIN_SCALE 0.05f
-#define AIR_DENSITY 1.2f     // 1.2 kg/m^3 (15˚C at sea level)
+#define PERLIN_SCALE 0.076f  // arbitrarily chosen increment for Perlin noise
+#define AIR_DENSITY  1.2f    // 1.2 kg/m^3 (15˚C at sea level)
 
 using namespace ci;
 using namespace ci::app;
@@ -45,9 +45,10 @@ void ParticleMovementApp::mouseDrag(MouseEvent e) {
 
     vec2 particlePos ((float)e.getX(), (float)e.getY());
     float radius = randInt(5, 25);
+    float mass = randFloat(0.1, 0.5);
     ColorA colour (randFloat(), randFloat(), randFloat(), 0.75f);
 
-    particles.emplace_back(Particle(particlePos, radius, colour));
+    particles.emplace_back(Particle(particlePos, radius, mass, colour));
 }
 
 // https://www.engineeringtoolbox.com/wind-load-d_1775.html
@@ -72,7 +73,6 @@ bool isOffscreen(const Particle &p) {
 
 void ParticleMovementApp::update() {
     // TODO forces:
-    // GRAVITY
     // BUOYANCY
 
     for (auto p = particles.begin(); p != particles.end(); ++p) {
@@ -81,10 +81,12 @@ void ParticleMovementApp::update() {
             continue;
         }
 
+        vec2 gravityForce (0, 0.1 * p->getMass()); // artificial gravity
+        p->applyForce(gravityForce);
+
         vec2 windForce(getWindForce(*p), 0.0); // restrict wind to x-plane BECAUSE I SAID SO
         p->applyForce(windForce);
 
-//        p->applyForce(gravityForce);
 //        p->applyForce(buoyantForce);
 
         p->update();

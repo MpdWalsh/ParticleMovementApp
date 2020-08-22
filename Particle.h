@@ -12,7 +12,7 @@ using namespace ci;
 class Particle {
 public:
     Particle();
-    Particle(const vec2&, float, const ColorA&);
+    Particle(const vec2&, float, float, const ColorA&);
 
     void update();
     void draw();
@@ -21,10 +21,12 @@ public:
     [[nodiscard]] vec2 getPosition() const;
     [[nodiscard]] float getRadius() const;
     [[nodiscard]] float getArea() const;
+    [[nodiscard]] float getMass() const;
 
 private:
     ColorA colour;
     float radius;
+    float mass;
     vec2 position;
     vec2 velocity;
     vec2 acceleration;
