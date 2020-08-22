@@ -53,7 +53,7 @@ void ParticleMovementApp::mouseDrag(MouseEvent e) {
 
 // https://www.engineeringtoolbox.com/wind-load-d_1775.html
 float ParticleMovementApp::getWindForce(const Particle &p) {
-    float windSpeed = wind.noise(getElapsedFrames() * PERLIN_SCALE) / 250; // big divide to make a gentle breeze
+    float windSpeed = wind.noise(getElapsedFrames() * PERLIN_SCALE) / 100; // big divide to make a gentle breeze
     float area = p.getArea();
 
     return 0.5f * AIR_DENSITY * windSpeed * windSpeed * area;
